@@ -3,17 +3,60 @@
 from math import cos, sin, degrees
 from random import randint, random
 
-from kivy.app import App
+from kivy.app import App, Builder
 from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
 from kivy.factory import Factory
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 
-from sprite import Sprite
+try:
+    #Try to import from the package folder
+    from sprite import Sprite
+
+except ImportError:
+    #Try to import with fully-qualified package name
+    from kvcheetah.sprite import Sprite
 
 
 #Globals
 #==============================================================================
+KVLANG = """
+<DemoBase>:
+    demo_area: DemoArea
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Button:
+            text: "Menu"
+            size_hint_y: .1
+            on_release: self.parent.parent.menu()
+
+        StencilView:
+            id: DemoArea
+
+
+<MainScreen>:
+    Screen:
+        name: "Menu"
+
+        BoxLayout:
+            orientation: "vertical"
+
+            Label:
+                text: "Choose a demo below:"
+                size_hint_y: .1
+
+            ScrollView:
+                BoxLayout:
+                    orientation: "vertical"
+
+                    Button:
+                        text: "Sprite Demo"
+                        on_release: root.switch_screen("SpriteDemo")
+
+    SpriteDemo:
+"""
 POP_SND = SoundLoader.load("data/sfx/bubble-pop.wav")
 
 
@@ -222,6 +265,7 @@ class KvCheetahApp(App):
     """A basic app class."""
     def build(self):
         """Build the UI for this app."""
+        Builder.load_string(KVLANG)
         return MainScreen()
 
 
