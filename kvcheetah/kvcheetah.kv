@@ -1,0 +1,35 @@
+<DemoBase>:
+    demo_area: DemoArea
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Button:
+            text: "Menu"
+            size_hint_y: .1
+            on_release: self.parent.parent.menu()
+
+        StencilView:
+            id: DemoArea
+
+
+<MainScreen>:
+    Screen:
+        name: "Menu"
+
+        BoxLayout:
+            orientation: "vertical"
+
+            Label:
+                text: "Choose a demo below:"
+                size_hint_y: .1
+
+            ScrollView:
+                BoxLayout:
+                    orientation: "vertical"
+
+                    Button:
+                        text: "Sprite Demo"
+                        on_release: root.switch_screen("SpriteDemo")
+
+    SpriteDemo:
