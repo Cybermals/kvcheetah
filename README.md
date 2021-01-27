@@ -6,7 +6,7 @@ Features
 --------
 * sprites
     * hardware-accelerated
-    * collision detection
+    * supports basic collision detection
     * supports rotation
 
 
