@@ -4,6 +4,7 @@ from math import sqrt
 
 from kivy.logger import Logger
 from kivy.graphics import (
+    Color,
     InstructionGroup,
     PopMatrix,
     PushMatrix,
@@ -27,12 +28,14 @@ class Sprite(object):
         self._pos = Translate(0, 0)
         self._rot = Rotate(0)
         self._origin = Translate(0, 0)
+        self._color = Color(1, 1, 1, 1)
         self._rect = Rectangle(pos = (0, 0), size = (1, 1))
         
         self._ig.add(PushMatrix())
         self._ig.add(self._pos)
         self._ig.add(self._rot)
         self._ig.add(self._origin)
+        self._ig.add(self._color)
         self._ig.add(self._rect)
         self._ig.add(PopMatrix())
 
@@ -51,6 +54,9 @@ class Sprite(object):
 
         if "rot" in kwargs:
             self.rot = kwargs["rot"]
+
+        if "color" in kwargs:
+            self.color = kwargs["color"]
 
         if "source" in kwargs:
             self.source = kwargs["source"]
@@ -147,6 +153,16 @@ class Sprite(object):
         self._velocity = value
 
     velocity = property(get_velocity, set_velocity)
+
+    def get_color(self):
+        """Get the color of this sprite."""
+        return self._color.rgba
+
+    def set_color(self, value):
+        """Set the color of this sprite."""
+        self._color.rgba = value
+
+    color = property(get_color, set_color)
 
     def get_source(self):
         """Get the source image for this sprite."""

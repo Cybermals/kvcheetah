@@ -55,7 +55,13 @@ KVLANG = """
                         text: "Sprite Demo"
                         on_release: root.switch_screen("SpriteDemo")
 
+                    Button:
+                        text: "Sprite Color Demo"
+                        on_release: root.switch_screen("SpriteColorDemo")
+
     SpriteDemo:
+
+    SpriteColorDemo:
 """
 POP_SND = SoundLoader.load("data/sfx/bubble-pop.wav")
 
@@ -157,6 +163,15 @@ class Pin(Sprite):
         self.source = "atlas://data/images/sprites/pin"
 
 
+class Egg(Sprite):
+    """Base class for an egg."""
+    def __init__(self, **kwargs):
+        super(Egg, self).__init__(**kwargs)
+        self.size = (48, 64)
+        self.origin = (24, 32)
+        self.source = "atlas://data/images/sprites/egg"
+
+
 class DemoBase(Screen):
     """Base class for a demo screen."""
     def menu(self):
@@ -215,6 +230,8 @@ class SpriteDemo(DemoBase):
         #Update spawn timer
         self.spawn_tmr -= 1
 
+        #Spawn a new bubble if the timer has expired and there are less than 10
+        #bubbles.
         if self.spawn_tmr <= 0 and len(self.bubbles) < 10:
             self.bubbles.append(Bubble(
                 parent = self.demo_area,
@@ -246,6 +263,48 @@ class SpriteDemo(DemoBase):
                 if bubble2.hp > 0 and bubble.hit(bubble2, "circle"):
                     bubble.invert_velocity()
                     bubble.hp -= 1
+
+
+class SpriteColorDemo(DemoBase):
+    """A sprite color demo."""
+    def __init__(self, **kwargs):
+        """Setup this demo."""
+        super(SpriteColorDemo, self).__init__(**kwargs)
+        self.name = "SpriteColorDemo"
+        self.color_tmr = 0
+
+    def on_enter(self):
+        """Handle enter event."""
+        #Create the egg
+        self.egg = Egg(parent = self)
+        self.egg.pos = (self.width / 2, self.height / 2)
+        self.egg.show(True)
+
+        #Start the demo
+        self.frame_event = Clock.schedule_interval(self.update, 1 / 60)
+
+    def on_leave(self):
+        """Handle leave event."""
+        #Stop the demo
+        self.frame_event.cancel()
+
+        #Destroy the egg
+        self.egg = None
+
+    def update(self, t):
+        """Update this demo."""
+        #Update color change timer
+        self.color_tmr -= 1
+
+        #Change the egg color if the timer has expired
+        if self.color_tmr <= 0:
+            self.egg.color = (
+                randint(0, 255) / 255,
+                randint(0, 255) / 255,
+                randint(0, 255) / 255,
+                1
+            )
+            self.color_tmr = 30
 
 
 class MainScreen(ScreenManager):
