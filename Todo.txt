@@ -1,2 +1,1 @@
-* add color adjustment to sprite class
 * create tile map
