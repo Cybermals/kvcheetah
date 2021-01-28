@@ -8,6 +8,7 @@ Features
     * hardware-accelerated
     * supports basic collision detection
     * supports rotation
+    * supports color adjustment
 
 
 Tested On
