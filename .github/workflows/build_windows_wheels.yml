@@ -1,8 +1,10 @@
-name: Build Ubuntu Wheels
+name: Build Windows Wheels
 
 on:
   release:
     types: [created]
+    tags:
+      - v*.*.*
 
 jobs:
   deploy:

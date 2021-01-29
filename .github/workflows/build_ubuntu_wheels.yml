@@ -3,6 +3,8 @@ name: Build Ubuntu Wheels
 on:
   release:
     types: [created]
+    tags:
+      - v*.*.*
 
 jobs:
   deploy:
