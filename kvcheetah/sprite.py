@@ -2,7 +2,6 @@
 
 from math import sqrt
 
-from kivy.logger import Logger
 from kivy.graphics import (
     Color,
     InstructionGroup,
@@ -12,6 +11,7 @@ from kivy.graphics import (
     Rotate,
     Translate
 )
+from kivy.logger import Logger
 
 
 #Classes

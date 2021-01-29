@@ -12,10 +12,12 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 try:
     #Try to import from the package folder
     from sprite import Sprite
+    from tilemap import TileMap
 
 except ImportError:
     #Try to import with fully-qualified package name
     from kvcheetah.sprite import Sprite
+    from kvcheetah.tilemap import TileMap
 
 
 #Globals
@@ -59,9 +61,15 @@ KVLANG = """
                         text: "Sprite Color Demo"
                         on_release: root.switch_screen("SpriteColorDemo")
 
+                    Button:
+                        text: "TileMap Demo"
+                        on_release: root.switch_screen("TileMapDemo")
+
     SpriteDemo:
 
     SpriteColorDemo:
+
+    TileMapDemo:
 """
 POP_SND = SoundLoader.load("data/sfx/bubble-pop.wav")
 
@@ -305,6 +313,70 @@ class SpriteColorDemo(DemoBase):
                 1
             )
             self.color_tmr = 30
+
+
+class TileMapDemo(DemoBase):
+    """A tilemap demo."""
+    def __init__(self, **kwargs):
+        """Setup this demo."""
+        super(DemoBase, self).__init__(**kwargs)
+        self.name = "TileMapDemo"
+
+    def on_enter(self):
+        """Handle enter event."""
+        #Init tileset and map data
+        tileset = [
+            "atlas://data/images/tiles/blank",
+            "atlas://data/images/tiles/dirt",
+            "atlas://data/images/tiles/grass",
+            "atlas://data/images/tiles/dirt-slope1",
+            "atlas://data/images/tiles/dirt-slope2",
+            "atlas://data/images/tiles/grass-slope1",
+            "atlas://data/images/tiles/grass-slope2",
+            "atlas://data/images/tiles/grass-slope-base1",
+            "atlas://data/images/tiles/grass-slope-base2"
+        ]
+        map_data = [[0 for x in range(32)] for y in range(32)]
+
+        #Add dirt tiles
+        for y in range(2):
+            for x in range(32):
+                map_data[y][x] = 1
+
+        #Add grass tiles
+        for x in range(32):
+            map_data[2][x] = 2
+
+        #Add a small hill
+        map_data[2][31] = 7
+        map_data[3][31] = 5
+
+        self.tilemap = TileMap(
+            parent = self.demo_area, 
+            size = (32, 32),
+            viewport = self.size[:],
+            tileset = tileset,
+            map_data = map_data
+            )
+        self.tilemap.show(True)
+
+        #Start the demo
+        self.frame_event = Clock.schedule_interval(self.update, 1 / 60)
+
+    def on_leave(self):
+        """Handle leave event."""
+        #Stop the demo
+        self.frame_event.cancel()
+
+        #Destroy the tilemap
+        self.tilemap = None
+
+    def update(self, t):
+        """Update this demo."""
+        #Scroll the tilemap horizontally
+        x, y = self.tilemap.offset
+        x += 2
+        self.tilemap.offset = (x, y)
 
 
 class MainScreen(ScreenManager):
