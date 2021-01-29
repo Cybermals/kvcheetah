@@ -167,7 +167,12 @@ class TileMap(object):
         ty = int(oy / 32)
 
         #Update pos
-        self._pos.xy = (-x, -y)
+        if self.parent is not None:
+            px, py = self.parent.pos
+            self._pos.xy = (px - x, py - y)
+
+        else:
+            self._pos.xy = (-x, -y)
 
         #Update the tiles
         vw, vh = self.viewport

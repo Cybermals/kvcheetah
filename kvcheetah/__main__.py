@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 
 try:
     #Try to import from the package folder
-    from . import __version__
+    from __init__ import __version__
     from sprite import Sprite
     from tilemap import TileMap
 
