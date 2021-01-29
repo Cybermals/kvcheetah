@@ -96,10 +96,26 @@ class Sprite(object):
 
     def get_pos(self):
         """Get the position of this sprite."""
-        return self._pos.xy
+        #Adjust current pos based on parent pos
+        x, y = self._pos.xy
+
+        if self.parent is not None:
+            px, py = self.parent.pos
+            x -= px
+            y -= py
+
+        return (x, y)
 
     def set_pos(self, value):
         """Set the position of this sprite."""
+        #Adjust new pos based on parent pos
+        if self.parent is not None:
+            px, py = self.parent.pos
+            x, y = value
+            x += px
+            y += py
+            value = (x, y)
+
         self._pos.xy = value
     
     pos = property(get_pos, set_pos)
