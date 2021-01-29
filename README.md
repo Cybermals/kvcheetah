@@ -27,6 +27,12 @@ Features
     * supports rotation
     * supports color adjustment
 
+* tilemaps
+    * hardware-accelerated
+    * supports adjustable viewport
+    * supports scrolling
+    * implements viewport culling
+
 
 Tested On
 ---------
