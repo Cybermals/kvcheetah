@@ -15,7 +15,7 @@ Building Instructions
 ---------------------
 1. clone this repo
 2. open a terminal or command prompt window and switch to the "kvcheetah" folder
-3. run ```python setup.py bdist_wheel```; if that filas, try running
+3. run ```python setup.py bdist_wheel```; if that fails, try running
 ```python3 setup.py bdist_wheel``` instead
 
 
