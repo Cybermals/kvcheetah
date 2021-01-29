@@ -11,11 +11,13 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 
 try:
     #Try to import from the package folder
+    from . import __version__
     from sprite import Sprite
     from tilemap import TileMap
 
 except ImportError:
     #Try to import with fully-qualified package name
+    from kvcheetah import __version__
     from kvcheetah.sprite import Sprite
     from kvcheetah.tilemap import TileMap
 
@@ -396,6 +398,7 @@ class KvCheetahApp(App):
     """A basic app class."""
     def build(self):
         """Build the UI for this app."""
+        self.title = "KvCheetah v{}".format(__version__)
         Builder.load_string(KVLANG)
         return MainScreen()
 
