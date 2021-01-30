@@ -28,4 +28,5 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         auditwheel repair dist/*.whl -w dist
+        rm *linux_x86_64.whl
         twine upload dist/*
