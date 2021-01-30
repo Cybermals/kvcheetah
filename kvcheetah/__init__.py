@@ -1,6 +1,6 @@
 """kvcheetah
 
-A lightweight 2D game engine based on Kivy.
+A lightweight game engine based on Kivy.
 """
 
 #Globals
@@ -8,4 +8,4 @@ A lightweight 2D game engine based on Kivy.
 __author__ = "Eric Snyder"
 __copyright__ = "Copyright (c) 2021 by Eric Snyder"
 __license__ = "MIT"
-__version__ = "1.1.1"
+__version__ = "1.1.2"
