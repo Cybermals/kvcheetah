@@ -27,6 +27,6 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_UPLOAD_TOKEN }}
       run: |
         python setup.py sdist bdist_wheel
-        auditwheel repair dist/*.whl -w dist
-        rm *linux_x86_64.whl
-        twine upload dist/*
+        auditwheel repair dist/*.whl -w fixed
+        mv dist/*.tar.gz fixed
+        twine upload fixed/*
