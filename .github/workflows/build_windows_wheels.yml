@@ -1,8 +1,9 @@
 name: Build Windows Wheels
 
 on:
-  release:
-    types: [created, edited]
+  push:
+      branches:
+          - main
 
 jobs:
   deploy:
