@@ -18,6 +18,12 @@
             "type": "shell",
             "command": "bash test_wheel.sh",
             "problemMatcher": []
+        },
+        {
+            "label": "Upload Package",
+            "type": "shell",
+            "command": "bash upload_package.sh",
+            "problemMatcher": []
         }
     ]
 }

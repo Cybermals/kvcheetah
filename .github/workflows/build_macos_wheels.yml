@@ -1,4 +1,4 @@
-name: Build Ubuntu Wheels
+name: Build MacOS Wheels
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
@@ -20,12 +20,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel cython auditwheel twine
+        pip install setuptools wheel cython twine
     - name: Build and publish
       env:
         TWINE_USERNAME: "__token__"
         TWINE_PASSWORD: ${{ secrets.PYPI_UPLOAD_TOKEN }}
       run: |
         python setup.py bdist_wheel
-        auditwheel repair dist/*.whl -w repaired
-        twine upload repaired/*
+        twine upload dist/*
