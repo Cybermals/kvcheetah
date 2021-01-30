@@ -32,6 +32,7 @@ Features
     * supports adjustable viewport
     * supports scrolling
     * implements viewport culling
+    * supports collision detection
 
 
 Tested On
