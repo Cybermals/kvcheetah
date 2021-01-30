@@ -148,8 +148,6 @@ class Bubble(Sprite):
 
     def update(self):
         """Update this bubble."""
-        super(Bubble, self).update()
-
         #Update velocity
         x, y = self.pos
         vx, vy = self.velocity
@@ -161,6 +159,7 @@ class Bubble(Sprite):
             vy = -vy
 
         self.velocity = (vx, vy)
+        super(Bubble, self).update()
 
 
 class Pin(Sprite):
@@ -176,10 +175,38 @@ class Pin(Sprite):
 class Egg(Sprite):
     """Base class for an egg."""
     def __init__(self, **kwargs):
+        """Setup this egg."""
         super(Egg, self).__init__(**kwargs)
         self.size = (48, 64)
         self.origin = (24, 32)
         self.source = "atlas://data/images/sprites/egg"
+
+
+class Ball(Sprite):
+    """Base class for a ball."""
+    def __init__(self, **kwargs):
+        """Setup this ball."""
+        super(Ball, self).__init__(**kwargs)
+        self.pos = (self.parent.width / 2, self.parent.height)
+        self.size = (64, 64)
+        self.origin = (32, 32)
+        self.velocity = (0, -2)
+        self.source = "atlas://data/images/sprites/ball"
+
+    def update(self):
+        """Update this ball."""
+        #Update velocity
+        vx, vy = self.velocity
+        vy -= 1
+        
+        if vy > 16:
+            vy = 16
+
+        if self.parent.parent.parent.tilemap.hit(self) > 0:
+            vy = -vy
+
+        self.velocity = (vx, vy)
+        super(Ball, self).update()
 
 
 class DemoBase(Screen):
@@ -286,7 +313,7 @@ class SpriteColorDemo(DemoBase):
     def on_enter(self):
         """Handle enter event."""
         #Create the egg
-        self.egg = Egg(parent = self)
+        self.egg = Egg(parent = self.demo_area)
         self.egg.pos = (self.width / 2, self.height / 2)
         self.egg.show(True)
 
@@ -350,9 +377,17 @@ class TileMapDemo(DemoBase):
             map_data[2][x] = 2
 
         #Add a small hill
-        map_data[2][31] = 7
-        map_data[3][31] = 5
+        map_data[2][29] = 7
+        map_data[3][29] = 5
+        map_data[2][30] = 1
+        map_data[3][30] = 7
+        map_data[4][30] = 5
+        map_data[2][31] = 1
+        map_data[3][31] = 1
+        map_data[4][31] = 7
+        map_data[5][31] = 5
 
+        #Create the tilemap
         self.tilemap = TileMap(
             parent = self.demo_area, 
             size = (32, 32),
@@ -362,6 +397,10 @@ class TileMapDemo(DemoBase):
             )
         self.tilemap.show(True)
 
+        #Create a ball
+        self.ball = Ball(parent = self.demo_area)
+        self.ball.show(True)
+
         #Start the demo
         self.frame_event = Clock.schedule_interval(self.update, 1 / 60)
 
@@ -369,6 +408,9 @@ class TileMapDemo(DemoBase):
         """Handle leave event."""
         #Stop the demo
         self.frame_event.cancel()
+
+        #Destroy the ball
+        self.ball = None
 
         #Destroy the tilemap
         self.tilemap = None
@@ -379,6 +421,9 @@ class TileMapDemo(DemoBase):
         x, y = self.tilemap.offset
         x += 2
         self.tilemap.offset = (x, y)
+
+        #Update the ball
+        self.ball.update()
 
 
 class MainScreen(ScreenManager):

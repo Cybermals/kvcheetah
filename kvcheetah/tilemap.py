@@ -210,3 +210,26 @@ class TileMap(object):
 
         #Update vibility state
         self._visible = do_show
+
+    def hit(self, sprite):
+        """Check what tile on this tilemap was hit by the given sprite. This will
+        return -1 if the sprite lies outside the bounds of the tilemap.
+        """
+        #Calculate the tile the sprite will be over
+        ox, oy = self.offset
+        x, y = sprite.pos
+        vx, vy = sprite.velocity
+        x += ox + vx
+        y += oy + vy
+        tx = int(x / 32)
+        ty = int(y / 32)
+
+        #Return the index of the tile
+        w, h = self.size
+
+        if tx > 0 and tx < w and ty > 0 and ty < h:
+            print("Hit Tile: {}".format(self.map_data[ty][tx]))
+            return self.map_data[ty][tx]
+
+        else:
+            return -1
