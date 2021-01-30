@@ -38,3 +38,11 @@ Tested On
 ---------
 * Python 3.8.5 and Kivy 2.0.0 for Lubuntu 20.04 (64-bit)
 * Python 3.6.8 and Kivy 1.11.0 for Windows Vista (32-bit)
+
+
+Status
+------
+![Build MacOS Wheels](https://github.com/Cybermals/kvcheetah/workflows/Build%20MacOS%20Wheels/badge.svg?branch=main)
+![Build Ubuntu Wheels](https://github.com/Cybermals/kvcheetah/workflows/Build%20Ubuntu%20Wheels/badge.svg?branch=main)
+![Build Windows Wheels](https://github.com/Cybermals/kvcheetah/workflows/Build%20Windows%20Wheels/badge.svg?branch=main)
+![Build Source Package](https://github.com/Cybermals/kvcheetah/workflows/Build%20Source%20Package/badge.svg?branch=main)
