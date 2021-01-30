@@ -1,4 +1,5 @@
-from setuptools import setup
+from setuptools import Extension, setup
+from Cython.Build import cythonize
 
 #Load readme file
 with open("README.md", "r") as f:
@@ -7,5 +8,9 @@ with open("README.md", "r") as f:
 #Run setup
 setup(
     long_description = long_desc,
-    long_description_content_type = "text/markdown"
+    long_description_content_type = "text/markdown",
+    ext_modules = cythonize([
+        Extension("sprite", ["kvcheetah/sprite.py"]),
+        Extension("tilemap", ["kvcheetah/tilemap.py"])
+    ])
 )
