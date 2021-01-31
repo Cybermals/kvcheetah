@@ -228,7 +228,6 @@ class TileMap(object):
         w, h = self.size
 
         if tx > 0 and tx < w and ty > 0 and ty < h:
-            print("Hit Tile: {}".format(self.map_data[ty][tx]))
             return self.map_data[ty][tx]
 
         else:
