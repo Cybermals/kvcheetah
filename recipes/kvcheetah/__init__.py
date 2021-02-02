@@ -10,7 +10,7 @@ class KvCheetah(CythonRecipe):
     # use their pre-written build processes
 
     name = "kvcheetah"
-    version = "1.1.5"
+    version = "1.2.0"
     url = "https://github.com/Cybermals/kvcheetah/archive/v{version}.tar.gz"
     # {version} will be replaced with self.version when downloading
 

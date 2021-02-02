@@ -1,15 +1,7 @@
-#!/usr/bin/python3
-#"""Android app testing stub."""
-import os
-import kvcheetah
-
-#Ensure that the current directory is the kvcheetah package dir and run the
-#package.
-os.chdir(os.path.dirname(kvcheetah.__file__))
-#import kvcheetah.__main__
 """kvcheetah - Testing Framework"""
 
 from math import cos, sin, degrees
+import os
 from random import randint, random
 
 from kivy.app import App, Builder
@@ -26,9 +18,13 @@ try:
 
 except ImportError:
     #Try to import with fully-qualified package name
+    import kvcheetah
     from kvcheetah import __version__
     from kvcheetah.sprite import Sprite
     from kvcheetah.tilemap import TileMap
+
+    #Ensure that the current working directory is the kvcheetah package folder
+    os.chdir(os.path.dirname(kvcheetah.__file__))
 
 
 #Globals
@@ -398,9 +394,7 @@ class TileMapDemo(DemoBase):
 
         #Create the tilemap
         self.tilemap = TileMap(
-            parent = self.demo_area, 
-            size = (32, 32),
-            viewport = self.size[:],
+            parent = self.demo_area,
             tileset = tileset,
             map_data = map_data
             )
@@ -427,9 +421,9 @@ class TileMapDemo(DemoBase):
     def update(self, t):
         """Update this demo."""
         #Scroll the tilemap horizontally
-        #x, y = self.tilemap.offset
-        #x += 2
-        #self.tilemap.offset = (x, y)
+        x, y = self.tilemap.offset
+        x += 2
+        self.tilemap.offset = (x, y)
 
         #Update the ball
         self.ball.update()
