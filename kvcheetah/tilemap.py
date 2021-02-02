@@ -1,10 +1,13 @@
 """kvcheetah - TileMap API"""
 
 from kivy.graphics import (
-    InstructionGroup, 
+    ClearBuffers,
+    ClearColor,
+    Fbo,
+    InstructionGroup,
     PopMatrix,
     PushMatrix,
-    Rectangle, 
+    Rectangle,
     Translate
 )
 from kivy.logger import Logger
@@ -17,25 +20,24 @@ class TileMap(object):
     def __init__(self, **kwargs):
         """Setup this tilemap."""
         self._parent = None
-        self._size = (0, 0)
-        self._viewport = (800, 600)
         self._tileset = None
         self._map_data = None
-        self._ig = InstructionGroup()
-        self._pos = Translate(0, 0)
-        self._offset = (0, 0)
         self._tiles = None
         self._visible = False
+        self._ig = InstructionGroup()
+        self._offset = Translate(0, 0)
+        self._fbo = Fbo(size = (32, 32))
+        self._rect = Rectangle(pos = (0, 0), size = (32, 32), 
+            texture = self._fbo.texture)
+
+        self._ig.add(PushMatrix())
+        self._ig.add(self._offset)
+        self._ig.add(self._rect)
+        self._ig.add(PopMatrix())
 
         #Process keyword args
         if "parent" in kwargs:
             self.parent = kwargs["parent"]
-
-        if "size" in kwargs:
-            self.size = kwargs["size"]
-
-        if "viewport" in kwargs:
-            self.viewport = kwargs["viewport"]
 
         if "tileset" in kwargs:
             self.tileset = kwargs["tileset"]
@@ -65,8 +67,14 @@ class TileMap(object):
         if self.visible:
             self.show(False)
 
+        #Unbind pos and size handlers
+        #how to do this?
+
         #Set the new parent
         self._parent = value
+
+        #Bind new pos and size handlers
+        #TODO
 
     def get_visible(self):
         """Get the visibility state of this tilemap."""
@@ -76,24 +84,12 @@ class TileMap(object):
 
     def get_size(self):
         """Get the size of this tilemap."""
-        return self._size
+        if self.map_data is None:
+            return (0, 0)
 
-    def set_size(self, value):
-        """Set the size of this tilemap."""
-        self._size = value
+        return (len(self.map_data[0]), len(self.map_data))
 
-    size = property(get_size, set_size)
-
-    def get_viewport(self):
-        """Get the viewport size of this tilemap."""
-        return self._viewport
-
-    def set_viewport(self, value):
-        """Set the viewport size of this tilemap."""
-        self._viewport = value
-        self.refresh()
-
-    viewport = property(get_viewport, set_viewport)
+    size = property(get_size)
 
     def get_tileset(self):
         """Get the tileset for this tilemap."""
@@ -119,79 +115,69 @@ class TileMap(object):
 
     def get_offset(self):
         """Get the offset of this tilemap."""
-        return self._offset
+        #Adjust the current offset based on the parent pos
+        x, y = self._offset.xy
+
+        if self.parent is not None:
+            px, py = self.parent.pos
+            x -= px
+            y -= py
+
+        return (-x, -y)
 
     def set_offset(self, value):
         """Set the offset of this tilemap."""
-        self._offset = value
-        self.update()
+        #Adjust the new offset based on the parent pos
+        if self.parent is not None:
+            x, y = value
+            px, py = self.parent.pos
+            x += px
+            y += py
+            value = (-x, -y)
+
+        self._offset.xy = value
 
     offset = property(get_offset, set_offset)
 
-    def refresh(self):
-        """Refresh the internal data structures used for rendering."""
-        #Clear old tiles and reinitialize them
-        w, h = self.viewport
-        w = int(w / 32) + 1
-        h = int(h / 32) + 1
-        self._ig.clear()
-        self._tiles = [[Rectangle(pos = (x * 32, y * 32), size = (32, 32)) for x in range(w)] for y in range(h)]
-        self._ig.add(PushMatrix())
-        self._ig.add(self._pos)
-
-        for row in self._tiles:
-            for tile in row:
-                self._ig.add(tile)
-
-        self._ig.add(PopMatrix())
-
-        #Update the data too
-        self.update()
-
     def update(self):
-        """Update this tilemap."""
-        #Skip this if there is no tilset or no map data
+        """Update the tilemap texture."""
+        #Skip this if there is no tileset or map data
         if self.tileset is None:
-            Logger.warning("TileMap: No tileset assigned to tilemap.")
+            Logger.warning("TileMap: There is no assigned tileset.")
             return
 
         if self.map_data is None:
-            Logger.warning("TileMap: No map data assigned to tilemap.")
+            Logger.warning("TileMap: There is no map data.")
             return
 
-        #Calulate tilemap position and start tile
-        ox, oy = self._offset
-        x = ox % 32
-        y = oy % 32
-        tx = row_start = int(ox / 32)
-        ty = int(oy / 32)
-
-        #Update pos
-        if self.parent is not None:
-            px, py = self.parent.pos
-            self._pos.xy = (px - x, py - y)
-
-        else:
-            self._pos.xy = (-x, -y)
-
-        #Update the tiles
-        vw, vh = self.viewport
-        vw = int(vw / 32) + 1
-        vh = int(vh / 32) + 1
+        #Update Fbo size
         w, h = self.size
+        w = w * 32
+        h = h * 32
+        self._fbo.size = (w, h)
+        self._rect.size = (w, h)
+        self._rect.texture = self._fbo.texture
 
-        for y in range(vh):
-            for x in range(vw):
-                if tx < 0 or tx > w - 1 or ty < 0 or ty > h - 1:
-                    self._tiles[y][x].source = self.tileset[0]
+        #Draw the new tiles
+        with self._fbo:
+            ClearColor(0, 0, 0, 1)
+            ClearBuffers()
 
-                else:
-                    self._tiles[y][x].source = self.tileset[self.map_data[ty][tx]]
+            #Draw each tile
+            x = 0
+            y = 0
 
-                tx += 1
+            for row in self.map_data:
+                for tile in row:
+                    Rectangle(pos = (x, y), size = (32, 32), 
+                        source = self.tileset[tile])
+                    x += 32
 
-            ty += 1
-            tx = row_start
+                y += 32
+                x = 0
+
+            #Force a redraw of the Fbo
+            self._fbo.draw()
 
     def show(self, do_show):
         """Show/hide this tilemap."""
