@@ -370,15 +370,15 @@ class TileMapDemo(DemoBase):
             "atlas://data/images/tiles/grass-slope-base1",
             "atlas://data/images/tiles/grass-slope-base2"
         ]
-        map_data = [[0 for x in range(32)] for y in range(32)]
+        map_data = [[0 for x in range(128)] for y in range(128)]
 
         #Add dirt tiles
         for y in range(2):
-            for x in range(32):
+            for x in range(128):
                 map_data[y][x] = 1
 
         #Add grass tiles
-        for x in range(32):
+        for x in range(128):
             map_data[2][x] = 2
 
         #Add a small hill

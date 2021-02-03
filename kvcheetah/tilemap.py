@@ -159,8 +159,10 @@ class TileMap(object):
         self._rect.texture = self._fbo.texture
 
         #Draw the new tiles
+        self._fbo.clear()
+
         with self._fbo:
-            ClearColor(0, 0, 0, 1)
+            ClearColor(0, 0, 0, 0)
             ClearBuffers()
 
             #Draw each tile
