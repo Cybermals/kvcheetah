@@ -45,6 +45,22 @@ KVLANG = """
             id: DemoArea
 
 
+<JoystickDemo>:
+    pos_lbl: PosLabel
+    joystick: Joystick
+
+    Label:
+        id: PosLabel
+        text: "Joystick Pos: (0, 0)"
+        center: self.center
+
+    VirtualJoystick:
+        id: Joystick
+        size_hint: (None, None)
+        pos: (50, 50)
+        size: (100, 100)
+
+
 <MainScreen>:
     Screen:
         name: "Menu"
@@ -72,11 +88,21 @@ KVLANG = """
                         text: "TileMap Demo"
                         on_release: root.switch_screen("TileMapDemo")
 
+                    Button:
+                        text: "Joystick Demo"
+                        on_release: root.switch_screen("JoystickDemo")
+
     SpriteDemo:
+        name: "SpriteDemo"
 
     SpriteColorDemo:
+        name: "SpriteColorDemo"
 
     TileMapDemo:
+        name: "TileMapDemo"
+
+    JoystickDemo:
+        name: "JoystickDemo"
 """
 POP_SND = SoundLoader.load("data/sfx/bubble-pop.wav")
 
@@ -226,7 +252,6 @@ class SpriteDemo(DemoBase):
     def __init__(self, **kwargs):
         """Setup this demo."""
         super(SpriteDemo, self).__init__(**kwargs)
-        self.name = "SpriteDemo"
         self.spawn_tmr = 0
 
     def on_enter(self):
@@ -312,7 +337,6 @@ class SpriteColorDemo(DemoBase):
     def __init__(self, **kwargs):
         """Setup this demo."""
         super(SpriteColorDemo, self).__init__(**kwargs)
-        self.name = "SpriteColorDemo"
         self.color_tmr = 0
 
     def on_enter(self):
@@ -351,11 +375,6 @@ class SpriteColorDemo(DemoBase):
 
 class TileMapDemo(DemoBase):
     """A tilemap demo."""
-    def __init__(self, **kwargs):
-        """Setup this demo."""
-        super(DemoBase, self).__init__(**kwargs)
-        self.name = "TileMapDemo"
-
     def on_enter(self):
         """Handle enter event."""
         #Init tileset and map data
@@ -427,6 +446,23 @@ class TileMapDemo(DemoBase):
 
         #Update the ball
         self.ball.update()
+
+
+class JoystickDemo(DemoBase):
+    """A joystick demo."""
+    def on_enter(self):
+        """Handle enter event."""
+        #Start the demo
+        self.frame_event = Clock.schedule_interval(self.update, 1 / 60)
+
+    def on_leave(self):
+        """Handle leave event."""
+        #Stop the demo
+        self.frame_event.cancel()
+
+    def update(self, t):
+        """Update this demo."""
+        self.pos_lbl.text = "Joystick Pos: {}".format(self.joystick.joy_pos)
 
 
 class MainScreen(ScreenManager):

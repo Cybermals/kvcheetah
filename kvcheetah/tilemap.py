@@ -57,6 +57,9 @@ class TileMap(object):
         except ReferenceError:
             pass
 
+        #We must clear the Fbo to prevent a memory leak
+        self._fbo.clear()
+
     def get_parent(self):
         """Get the parent of this tilemap."""
         return self._parent
@@ -67,14 +70,8 @@ class TileMap(object):
         if self.visible:
             self.show(False)
 
-        #Unbind pos and size handlers
-        #how to do this?
-
         #Set the new parent
         self._parent = value
-
-        #Bind new pos and size handlers
-        #TODO
 
     def get_visible(self):
         """Get the visibility state of this tilemap."""
