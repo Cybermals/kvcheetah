@@ -2,6 +2,8 @@
 
 from math import cos, radians, sin, tan
 
+from .vector import Vec4
+
 
 #Classes
 #==============================================================================
@@ -95,10 +97,24 @@ cdef class Mat4(object):
     def __cinit__(self, *args):
         """Setup this matrix."""
         #Init data
-        for i in range(16):
-            self.data[i] = 0
+        if len(args) == 0:
+            for i in range(16):
+                self.data[i] = 0
 
-        #TODO: Allow initialization from list, matrix, etc.
+        #Copy matrix
+        elif isinstance(args[0], Mat4):
+            m = args[0]
+
+            for i in range(4):
+                self.data[i] = m.data[i]
+
+        #Copy data
+        else:
+            m = args[0]
+
+            for y in range(4):
+                for x in range(4):
+                    self[x, y] = m[y][x]
 
     def __getitem__(self, i):
         """Get an element of this matrix."""
@@ -124,6 +140,7 @@ cdef class Mat4(object):
 
     def __mul__(self, b):
         """Multiply this matrix with another matrix or a vector."""
+        #Multiply 2 matrices
         if isinstance(b, Mat4):
             res = Mat4()
 
@@ -132,4 +149,13 @@ cdef class Mat4(object):
                     for i in range(4):
                         res[x, y] += self[i, y] * b[x, i]
 
+            return res
+
+        #Multiply a matrix and a vector
+        elif isinstance(b, Vec4):
+            res = Vec4()
+            res.x = self[0, 0] * b.x + self[1, 0] * b.y + self[2, 0] * b.z + self[3, 0] * b.w
+            res.y = self[0, 1] * b.x + self[1, 1] * b.y + self[2, 1] * b.z + self[3, 1] * b.w
+            res.z = self[0, 2] * b.x + self[1, 2] * b.y + self[2, 2] * b.z + self[3, 2] * b.w
+            res.w = self[0, 3] * b.x + self[1, 3] * b.y + self[2, 3] * b.z + self[3, 3] * b.w
             return res

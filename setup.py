@@ -23,6 +23,7 @@ setup(
         Extension("kvcheetah.joystick", ["kvcheetah/joystick.py"]),
         Extension("kvcheetah.matrix", ["kvcheetah/matrix.pyx"]),
         Extension("kvcheetah.sprite", ["kvcheetah/sprite.py"]),
-        Extension("kvcheetah.tilemap", ["kvcheetah/tilemap.py"])
+        Extension("kvcheetah.tilemap", ["kvcheetah/tilemap.py"]),
+        Extension("kvcheetah.vector", ["kvcheetah/vector.pyx"])
     ])
 )
