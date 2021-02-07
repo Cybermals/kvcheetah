@@ -1,6 +1,6 @@
 """kvcheetah - Testing Framework"""
 
-from math import cos, sin, degrees
+from math import cos, radians, sin
 import os
 from random import randint, random
 
@@ -119,8 +119,8 @@ class Bubble(Sprite):
         self.origin = (32, 32)
         self.source = "atlas://data/images/sprites/bubble"
         self.velocity = (
-            2 * cos(degrees(randint(0, 359))),
-            2 * sin(degrees(randint(0, 359)))
+            2 * cos(radians(randint(0, 359))),
+            2 * sin(radians(randint(0, 359)))
         )
         self._hp = 10
         self._destroy_cb = None
