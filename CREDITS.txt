@@ -1,0 +1,10 @@
+Lead Programmer
+Eric Snyder (DylanCheetah)
+
+Beta Testers
+Eric Snyder (DylanCheetah) - Android, Ubuntu, Windows Vista
+Ironic - Windows 10
+misl6 - MacOS X Catalina
+
+Special Thanks
+The Kivy Team and their friendly community

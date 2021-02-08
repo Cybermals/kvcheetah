@@ -6,7 +6,7 @@
         {
             "label": "Build Wheel",
             "type": "shell",
-            "command": "python3 setup.py bdist_wheel",
+            "command": "bash build_wheel.sh",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

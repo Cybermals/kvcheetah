@@ -1,6 +1,6 @@
 """kvcheetah - Testing Framework"""
 
-from math import cos, sin, degrees
+from math import cos, radians, sin
 import os
 from random import randint, random
 
@@ -11,20 +11,18 @@ from kivy.factory import Factory
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 
 try:
-    #Try to import from the package folder
-    from __init__ import __version__
-    from sprite import Sprite
-    from tilemap import TileMap
+    from . import __version__
+    from .graphics.opengl import _gl
+    from .graphics.sprite import Sprite
+    from .graphics.tilemap import TileMap
+
+    #Ensure that the current working directory is the package dir
+    os.chdir(os.path.dirname(__file__))
 
 except ImportError:
-    #Try to import with fully-qualified package name
-    import kvcheetah
-    from kvcheetah import __version__
-    from kvcheetah.sprite import Sprite
-    from kvcheetah.tilemap import TileMap
-
-    #Ensure that the current working directory is the kvcheetah package folder
-    os.chdir(os.path.dirname(kvcheetah.__file__))
+    from __init__ import __version__
+    from graphics.sprite import Sprite
+    from graphics.tilemap import TileMap
 
 
 #Globals
@@ -122,8 +120,8 @@ class Bubble(Sprite):
         self.origin = (32, 32)
         self.source = "atlas://data/images/sprites/bubble"
         self.velocity = (
-            2 * cos(degrees(randint(0, 359))),
-            2 * sin(degrees(randint(0, 359)))
+            2 * cos(radians(randint(0, 359))),
+            2 * sin(radians(randint(0, 359)))
         )
         self._hp = 10
         self._destroy_cb = None
