@@ -1,13 +1,22 @@
 """kvcheetah - Low-Level OpenGL Wrapper API"""
 
-cdef extern:
-    ctypedef unsigned int GLenum
-    ctypedef int GLsizei
-    ctypedef void (*glDrawArraysInstanced)(GLenum mode, int first, GLsizei count, 
-        GLsizei primcount)
 
-cdef extern:
-    cdef void *SDL_GL_GetProcAddress(const char *proc)
+#Globals
+#===============================================================================
+cdef int is_init = False
+cdef GLDRAWARRAYSINSTANCEDPROC glDrawArraysInstanced
 
 
-print(<int>SDL_GL_GetProcAddress("glDrawArraysInstanced"))
+#Entry Point
+#===============================================================================
+#Initialize just once
+if not is_init:
+    #Try to import the SDL2 backend
+    try:
+        from ._gl_sdl2 import init
+        init()
+
+    except ImportError:
+        #Try to import the GLX backend
+        from ._gl_glx import init
+        init()
