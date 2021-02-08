@@ -19,7 +19,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        brew install glx-dev sdl2-dev
+        sudo brew install glx-dev sdl2-dev
         python -m pip install --upgrade pip
         pip install setuptools wheel cython twine
     - name: Build and publish
