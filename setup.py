@@ -20,10 +20,11 @@ setup(
     long_description = long_desc,
     long_description_content_type = "text/markdown",
     ext_modules = cythonize([
-        Extension("kvcheetah.joystick", ["kvcheetah/joystick.py"]),
-        Extension("kvcheetah.matrix", ["kvcheetah/matrix.pyx"]),
-        Extension("kvcheetah.sprite", ["kvcheetah/sprite.py"]),
-        Extension("kvcheetah.tilemap", ["kvcheetah/tilemap.py"]),
-        Extension("kvcheetah.vector", ["kvcheetah/vector.pyx"])
+        Extension("kvcheetah.math.matrix", ["kvcheetah/math/matrix.pyx"]),
+        Extension("kvcheetah.math.vector", ["kvcheetah/math/vector.pyx"]),
+        Extension("kvcheetah.graphics.sprite", ["kvcheetah/graphics/sprite.py"]),
+        Extension("kvcheetah.graphics.tilemap", ["kvcheetah/graphics/tilemap.py"]),
+        Extension("kvcheetah.uix.joystick", ["kvcheetah/uix/joystick.py"]),
+        
     ])
 )

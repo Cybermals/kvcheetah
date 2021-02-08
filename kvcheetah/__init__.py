@@ -8,13 +8,13 @@ A lightweight game engine based on Kivy.
 __author__ = "Eric Snyder"
 __copyright__ = "Copyright (c) 2021 by Eric Snyder"
 __license__ = "MIT"
-__version__ = "1.4.0"
+__version__ = "2.0.0"
 
 
 #Make sure widget classes get imported and initialized
 #==============================================================================
 try:
-    from . import joystick
+    from .uix import joystick
 
 except ImportError:
-    import joystick
+    from uix import joystick
