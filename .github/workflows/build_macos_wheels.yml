@@ -17,6 +17,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Build SDL2
+      run: |
+        hg clone https://hg.libsdl.org/SDL SDL
+        mkdir build ; cd build ; CC=../SDL/build-scripts/gcc-fat.sh ../configure ; make
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
