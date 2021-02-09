@@ -14,12 +14,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v2 artemnovichkov/action-homebrew@master
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo brew install libx11-dev libsdl2-dev
+        brew install libx11-dev libsdl2-dev
         python -m pip install --upgrade pip
         pip install setuptools wheel cython twine
     - name: Build and publish
