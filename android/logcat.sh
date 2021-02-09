@@ -6,4 +6,4 @@ export ANDROIDAPI="29"       # Target API version of your application
 export ANT_HOME="$HOME/apache-ant-1.10.8"
 
 #Run python-for-android
-$ANDROIDSDK/platform-tools/adb logcat
+$ANDROIDSDK/platform-tools/adb logcat -s python
