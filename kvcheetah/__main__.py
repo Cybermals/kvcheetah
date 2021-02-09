@@ -12,7 +12,6 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 
 try:
     from . import __version__
-    from .graphics.opengl import _gl
     from .graphics.sprite import Sprite
     from .graphics.tilemap import TileMap
 
